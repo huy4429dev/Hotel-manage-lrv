@@ -214,6 +214,11 @@ class RoomController extends Controller
         ]);
     }
 
+    public function checkOut(Request $request){
+        $order = Order::where('phong_id',$request->roomId)->get()->last();
+        return $order;
+    }
+
 
 
 

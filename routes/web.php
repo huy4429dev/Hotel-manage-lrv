@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-  return view('index');
-});
+Route::get('/','Page\HomeController@index');
+
+Route::post('/contact','Page\ContactController@contact');
 
 
 
@@ -48,6 +48,12 @@ Route::prefix('admin')->group(function () {
     */
 
   Route::prefix('room')->group(function () {
+        /*
+            Thanh toán
+    */
+
+    Route::post('/checkout', 'Admin\RoomController@checkOut');
+    
     Route::get('/', 'Admin\RoomController@index');
     Route::get('/map', 'Admin\RoomController@getMap');
 
@@ -72,6 +78,9 @@ Route::prefix('admin')->group(function () {
     */
 
     Route::post('/add-service/{id}', 'Admin\RoomController@addService');
+
+
+
   });
 
 
@@ -141,31 +150,3 @@ Route::prefix('admin')->group(function () {
   Route::post('/upload', 'Admin\UploadController@upload')->name('admin.upload');
 });
 
-
-Route::get('query', function () {
-
-
-  $query = DB::select('select cua_hang.ten_mat_hang , cua_hang.don_gia as don_gia, sum(dich_vu.so_luong) as so_luong
-                        from phong 
-                        join dich_vu 
-                        on dich_vu.phong_id = phong.id 
-                        join cua_hang
-                        on cua_hang.id = dich_vu.mat_hang_id
-                        where phong.id = 3 and trang_thai = "full" or trang_thai = "fulltime" 
-                        group by cua_hang.ten_mat_hang, cua_hang.don_gia
-                      ');
-
-  // $query = DB::table('phong')
-  // ->where('phong.id', '=', 3)
-  // ->where(function ($query) {
-  //     $query->where('trang_thai', '=', 'full')
-  //         ->orWhere('trang_thai', '=', 'fulltime');
-  // })
-  // ->join('dich_vu', 'phong.id', '=', 'dich_vu.phong_id')
-  // ->join('cua_hang', 'dich_vu.mat_hang_id', '=', 'cua_hang.id')
-  // ->groupBy('ten_mat_hang')
-  // ->get('ten_mat_hang','so_luong','don_gia','thanh_tien');
-
-
-  print_r($query);
-});

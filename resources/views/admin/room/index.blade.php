@@ -11,6 +11,13 @@
 @section('content')
 <div class="container-fluid">
     <!-- Info boxes -->
+    @if($rooms->isEmpty())
+    <div class="alert alert-warning">   
+        <h4 class="text-center">
+            Vui lòng thiết lập phòng
+        </h4>
+    </div>
+    @else
     <div class="row">
         @foreach($rooms as $room)
         <div class="col-12 col-sm-6 col-md-3">
@@ -67,48 +74,8 @@
             <!-- /.info-box -->
         </div>
         @endforeach
-        <!-- /.col -->
-        <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-                <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-cog"></i></span>
-
-                <div class="info-box-content">
-                    <span class="info-box-text">ID: 002</span>
-                    <small>Đang bảo trì</small>
-                </div>
-                <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-                <span class="info-box-icon bg-success elevation-1"><i class="fas fa-cog"></i></span>
-
-                <div class="info-box-content">
-                    <span class="info-box-text">ID: 004</span>
-                    <small>Phòng trống</small>
-                </div>
-                <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-                <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-cog"></i></span>
-
-                <div class="info-box-content">
-                    <span class="info-box-text">ID: 006</span>
-                    <small>Nguyễn Văn B</small>
-                </div>
-                <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
-
     </div>
+    @endif
 </div>
 @stop
 

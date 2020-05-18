@@ -141,11 +141,29 @@
           </table>
           <div class="card-footer clearfix">
                 <ul class="pagination pagination-sm m-0 float-right">
-                  <li class="page-item"><a href="" class="btn btn-success btn-sm">Thanh toán</a></li>
+                  <li class="page-item"><button id="checkout" class="btn btn-success btn-sm">Thanh toán</button></li>
                 </ul>
               </div>
           @else
           <p class="pt-3 pl-3">Chưa thêm dịch vụ nào </p>
+          <table id="listServices" class="table table-sm">
+            <thead>
+              <tr>
+                <th style="width: 10px">#</th>
+                <th>Tên dịch vụ</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            </table>
+          <div class="card-footer clearfix">
+                <ul class="pagination pagination-sm m-0 float-right">
+                <li class="page-item"><button id="checkout" class="btn btn-success btn-sm">Thanh toán</button></li>
+                </ul>
+              </div>
           @endif
 
         </div>
@@ -221,7 +239,6 @@
 
     @section('js')
     <script>
-      var countDownDate = new Date("Jan 5, 2021 15:37:25").getTime();
 
       var x = setInterval(function() {
 
@@ -233,14 +250,19 @@
         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
         // Display the result in the element with id="demo"
-        document.getElementById("clock").innerHTML = hours + "h " +
-          minutes + "m " + seconds + "s ";
+        
+        var clock = document.getElementById("clock");
+        if(clock != null){
+
+        clock.innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
 
         // If the count down is finished, write some text
-        if (distance < 0) {
-          clearInterval(x);
-          document.getElementById("clock").innerHTML = "Hết giờ";
+          if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("clock").innerHTML = "Hết giờ";
+          }
         }
+        
 
       }, 1000);
     </script>
@@ -252,6 +274,11 @@
     </script>
     <script>
 
+      /*===========================================
+        AJAX -> thêm dịch vụ
+      */
+
+      const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
 
       let renderListServices = function(data){
@@ -277,29 +304,21 @@
       }
 
       let listServices = document.querySelector('#listServices tbody');
-      
-
       let btnAddService = document.querySelector('#add-service');
-
-      const url = "{{url("/admin/room/add-service/$room->id")}}";
-
-      const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
       let modalBody = document.querySelector('.modal-body > div');
       let nodeAfterAlert = document.querySelector('#before-alert');
-
-
-      
-
 
       let alertAddService = document.createElement('div');
       alertAddService.className += 'alert alert-success alert-add-service';
 
-      btnAddService.addEventListener('click', function() {
 
+
+      btnAddService.addEventListener('click', function() {
+        
+        let url = "{{url("/admin/room/add-service/$room->id")}}";
+        
         let mat_hang_id = document.querySelector('select[name="mat_hang_id"]').value;
         let so_luong = document.querySelector('input[name="so_luong"]').value;
-
-
         const data = {
           mat_hang_id: mat_hang_id,
           so_luong: so_luong,
@@ -328,5 +347,43 @@
           })
 
       })
+
+
+      /*===========================================
+        AJAX -> Thanh toán
+      */
+       
+       let btnCheckout = document.querySelector('#checkout');
+       btnCheckout.addEventListener('click', function(){
+
+        let url = "{{url("/admin/room/checkout")}}";
+
+        let data = {
+          roomId: {{$room->id}}
+        };
+
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': csrfToken
+            },
+            body: JSON.stringify(data)
+
+          })
+          .then(response => response.json())
+          .then(data => {
+
+            console.log(data);
+          
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+
+       })
+
+
     </script>
     @stop
