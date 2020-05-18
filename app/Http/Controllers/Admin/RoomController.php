@@ -8,6 +8,7 @@ use App\Models\ConfigRoom;
 use App\Models\Customer;
 use App\Models\Floor;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Room;
 use App\Models\Service;
 use App\Models\Store;
@@ -215,7 +216,39 @@ class RoomController extends Controller
     }
 
     public function checkOut(Request $request){
+
+         
+        $room = Room::find($request->roomId);
         $order = Order::where('phong_id',$request->roomId)->get()->last();
+        $timeOut = BookRoom::where('phong_id', $request->roomId)->get()->last()->thoi_gian_dat;
+        $amount = $order->tong_tien * $timeOut;
+        $services = Service::where('phong_id','=',$request->roomId)->where('trang_thai_dv','=',0)->get();
+        if(!$services->isEmpty())
+        {
+            foreach ($services as $service) {
+                
+                OrderDetail::create([
+                    'hoa_don_id'  => $order->id,
+                    'mat_hang_id' => $service->mat_hang_id,
+                    'so_luong'    => $service->so_luong,
+                    'don_gia'     => $service->product->don_gia,
+                    'thanh_tien'  => $service->product->don_gia * $service->so_luong,
+                ]);
+
+                $amount +=  $service->product->don_gia * $service->so_luong;
+                
+                $service->trang_thai_dv = 1;
+                $service->save();
+            }
+        }
+
+        $order->tong_tien = $amount;
+        
+        $order->save();
+
+        $room->trang_thai = 'maintenance';
+        $room->save();
+
         return $order;
     }
 

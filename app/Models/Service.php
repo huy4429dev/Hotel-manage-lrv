@@ -16,7 +16,6 @@ class Service extends Model
     }
 
     public function product(){
-
             return $this->belongsTo('App\Models\Store','mat_hang_id');
     }
 

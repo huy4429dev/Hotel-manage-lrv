@@ -22,6 +22,7 @@
           <span class="info-box-text">{{$room->ma_phong}}</span>
           <span class="info-box-number">
             <small>{{$statusInfo}}</small>
+            <p>{{$room->typeRoom->ten}} : <span>{{number_format($room->typeRoom->gia_phong)}} đ</span></p>
           </span>
         </div>
         <!-- /.info-box-content -->
@@ -141,7 +142,7 @@
           </table>
           <div class="card-footer clearfix">
                 <ul class="pagination pagination-sm m-0 float-right">
-                  <li class="page-item"><button id="checkout" class="btn btn-success btn-sm">Thanh toán</button></li>
+                  <li class="page-item"><button id="checkout" data-toggle="modal" data-target="#modal-success"  class="btn btn-success btn-sm">Thanh toán</button></li>
                 </ul>
               </div>
           @else
@@ -161,11 +162,31 @@
             </table>
           <div class="card-footer clearfix">
                 <ul class="pagination pagination-sm m-0 float-right">
-                <li class="page-item"><button id="checkout" class="btn btn-success btn-sm">Thanh toán</button></li>
+                <li class="page-item"><button id="checkout" data-toggle="modal" data-target="#modal-success" class="btn btn-success btn-sm">Thanh toán</button></li>
                 </ul>
               </div>
           @endif
-
+ 
+        <div class="modal fade" id="modal-success">
+        <div class="modal-dialog">
+          <div class="modal-content bg-success">
+            <div class="modal-header">
+              <h4 class="modal-title">Thanh toán thành công</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+              <p></p>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-outline-light">Xuất hóa đơn</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
         </div>
 
         <!-- /.card-body -->
@@ -179,6 +200,27 @@
   </div>
 </div>
 </div>
+<div class="modal fade" id="modal-success">
+        <div class="modal-dialog">
+          <div class="modal-content bg-success">
+            <div class="modal-header">
+              <h4 class="modal-title">Success Modal</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+              <p>One fine body&hellip;</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-outline-light">Save changes</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+</div>
+    <!-- /.modal -->
 <div class="modal fade" id="modal-lg">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -215,7 +257,9 @@
       </div>
       <!-- /.modal-dialog -->
     </div>
-    <!-- /.modal -->
+  </div>
+</div>
+
     @stop
 
     @section('css')
