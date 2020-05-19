@@ -83,6 +83,21 @@ Route::prefix('admin')->group(function () {
 
   });
 
+  
+  /*========================================================
+      Quản lý doanh thu
+      ========================================================
+  */
+  
+
+  Route::prefix('order')->group(function () {
+
+      Route::get('/', 'Admin\OrderController@index')->name('admin.order.index');
+      Route::get('/{id}', 'Admin\OrderController@detail')->name('admin.order.detail');
+
+  });
+
+
 
   /*========================================================
       Quản lý tin tức 
@@ -150,3 +165,15 @@ Route::prefix('admin')->group(function () {
   Route::post('/upload', 'Admin\UploadController@upload')->name('admin.upload');
 });
 
+
+
+Route::get('query', function(){
+    $data = DB::table('chi_tiet_hoa_don')
+    ->join('cua_hang','cua_hang.id','=','chi_tiet_hoa_don.mat_hang_id')
+    ->where('hoa_don_id', 1)
+    ->select('chi_tiet_hoa_don.*', 'cua_hang.ten_mat_hang')
+    ->get();
+    
+    print_r($data);
+    
+});

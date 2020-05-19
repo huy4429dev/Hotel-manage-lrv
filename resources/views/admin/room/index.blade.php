@@ -44,7 +44,12 @@
             @case("full")
             @php
                 $class = "info";
-                $roomInfo = "Nguyễn Văn A";
+                $roomInfo = $room->order->filter(
+                                function($order,$key)
+                                    {
+                                        return $order->trang_thai == 0;
+                                    })->first()->customer->ho_ten;
+
             @endphp
             @break
 

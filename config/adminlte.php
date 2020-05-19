@@ -255,29 +255,29 @@ return [
             ],
         ],
 
-        [
-            'text'    => 'Quản lý nhân viên',
-            'icon'    => 'fas fa-id-card-alt',
-            'submenu' => [
-                [
-                    'text' => 'Danh sách nhân viên',
-                    'url'  => 'admin/user',
-                    'icon' => 'fas fa-paste',
-                ],
-                [
-                    'text'    => 'Thêm tài khoản  ',
-                    'url'     => 'admin/user/setting',
-                    'icon' => 'fas fa-paste',
-                ],
-            ],
-        ],
+        // [
+        //     'text'    => 'Quản lý nhân viên',
+        //     'icon'    => 'fas fa-id-card-alt',
+        //     'submenu' => [
+        //         [
+        //             'text' => 'Danh sách nhân viên',
+        //             'url'  => 'admin/user',
+        //             'icon' => 'fas fa-paste',
+        //         ],
+        //         [
+        //             'text'    => 'Thêm tài khoản  ',
+        //             'url'     => 'admin/user/setting',
+        //             'icon' => 'fas fa-paste',
+        //         ],
+        //     ],
+        // ],
         [
             'text'    => 'Thống kê doanh thu',
             'icon'    => 'fas fa-money-check-alt',
             'submenu' => [
                 [
                     'text' => 'Danh sách đơn hàng',
-                    'url'  => '#',
+                    'url'  => '/admin/order',
                     'icon' => 'fas fa-paste',
                 ],
                 [

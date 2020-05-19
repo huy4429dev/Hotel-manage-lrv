@@ -84,7 +84,7 @@ class RoomController extends Controller
                             on dich_vu.phong_id = phong.id 
                             join cua_hang
                             on cua_hang.id = dich_vu.mat_hang_id
-                            where phong.id = $id and ( trang_thai = 'full' or trang_thai = 'fulltime' ) 
+                            where phong.id = $id and ( trang_thai = 'full' or trang_thai = 'fulltime' ) and dich_vu.trang_thai_dv = 0
                             group by cua_hang.ten_mat_hang, cua_hang.don_gia
                         ");
 
@@ -151,6 +151,7 @@ class RoomController extends Controller
 
         $room = Room::find($id);
         $room->trang_thai = "full";
+        $room->loai_phong_id  = $request->loai_phong_id;
         $room->save();
 
         BookRoom::create(
@@ -199,7 +200,7 @@ class RoomController extends Controller
                                 on dich_vu.phong_id = phong.id 
                                 join cua_hang
                                 on cua_hang.id = dich_vu.mat_hang_id
-                                where phong.id = $id and ( trang_thai = 'full' or trang_thai = 'fulltime' ) 
+                                where phong.id = $id and ( trang_thai = 'full' or trang_thai = 'fulltime' ) and dich_vu.trang_thai_dv = 0
                                 group by cua_hang.ten_mat_hang, cua_hang.don_gia");
 
         return response()->json([
@@ -221,6 +222,7 @@ class RoomController extends Controller
         $room = Room::find($request->roomId);
         $order = Order::where('phong_id',$request->roomId)->get()->last();
         $timeOut = BookRoom::where('phong_id', $request->roomId)->get()->last()->thoi_gian_dat;
+        $roomPrice = $order->tong_tien * $timeOut;
         $amount = $order->tong_tien * $timeOut;
         $services = Service::where('phong_id','=',$request->roomId)->where('trang_thai_dv','=',0)->get();
         if(!$services->isEmpty())
@@ -243,13 +245,19 @@ class RoomController extends Controller
         }
 
         $order->tong_tien = $amount;
-        
+
         $order->save();
 
         $room->trang_thai = 'maintenance';
         $room->save();
+        
+        $orderDetails = DB::table('chi_tiet_hoa_don')
+                        ->join('cua_hang','cua_hang.id','=','chi_tiet_hoa_don.mat_hang_id')
+                        ->where('hoa_don_id', $order->id)
+                        ->select('chi_tiet_hoa_don.*', 'cua_hang.ten_mat_hang')
+                        ->get();
 
-        return $order;
+        return response()->json(['orderDetails' => $orderDetails, 'amount' => $amount, 'roomPrice' => $roomPrice]);
     }
 
 
@@ -258,7 +266,7 @@ class RoomController extends Controller
     public function getMap()
     {
 
-        return "Vẽ map khi thiết lập phòng";
+        return view('admin.room.get_map');
     }
 
     public function viewSetting()
@@ -358,6 +366,7 @@ class RoomController extends Controller
                     Room::create(["ma_phong" => $keyOfRoom, "trang_thai" => "Empty", "loai_phong_id" => 2]);
                     $i++;
                 }
+
                 $numberFloor++;
             }
             return Redirect::Back()->with('success', 'Thiết lập thành công !');

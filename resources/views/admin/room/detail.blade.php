@@ -51,21 +51,20 @@
           <div class="form-group">
             <label>Trạng thái:</label>
             <select class="form-control" style="width: 100%;" name="trang_thai">
-              <!-- @switch($room->trang_thai)
-                @case('empty')
-                  @php 
-                    $selected 
-                  @endphp 
-                @break
-              @endswitch -->
-              <option {{ strtolower($room->trang_thai === 'maintenance') ?  'selected' : '' }} value="maintenance">Bảo trì</option>
-              <option {{ strtolower($room->trang_thai === 'empty') ?  'selected' : null }} value="empty">Phòng trống</option>
-              <option {{ strtolower($room->trang_thai === 'full') ?  'selected' : null }}" value="full">Thêm khách hàng</option>
-              <option {{ strtolower($room->trang_thai === 'fulltime') ?  'selected' : null }}" value="fulltime">Hết giờ</option>
+              <option {{ strtolower($room->trang_thai === 'maintenance') ? 'selected ' : '' }}  value="maintenance">Bảo trì</option>
+              <option {{ strtolower($room->trang_thai === 'empty') ? 'selected ' : '' }}  value="empty">Phòng trống</option>
+              <option {{ strtolower($room->trang_thai === 'full') ? 'selected ' : '' }}   value="full">Thêm khách hàng</option>
+              <option {{ strtolower($room->trang_thai === 'fulltime') ? 'selected ' : '' }}   value="fulltime">Hết giờ</option>
             </select>
           </div>
         </div>
-
+        <div class="form-group">
+          <label>Loại phòng:</label>
+          <select class="form-control" style="width: 100%;" name="loai_phong_id">
+              <option {{ $room->loai_phong_id === 1 ?  'selected' : '' }} value="1">Vip</option>
+              <option {{$room->loai_phong_id  === 2  ?  'selected' : '' }} value="2">Normal</option>
+            </select>
+        </div>
         <div class="form-group">
           <label>Họ tên:</label>
           <input type="text" class="form-control my-colorpicker1" name="ho_ten" value="{{$customer->ho_ten ?? ''}}">
@@ -86,6 +85,8 @@
           <input type="text" class="form-control my-colorpicker1" name="thoi_gian_dat" value="{{$bookRoom->thoi_gian_dat ?? ''}}">
         </div>
 
+
+
         <div class="form-group">
           <label>Ghi chú:</label>
           <textarea type="text" class="form-control my-colorpicker1" name="ghi_chu">{{$bookRoom->ghi_chu ?? ''}}</textarea>
@@ -99,6 +100,7 @@
     </div>
   </div>
 
+  @if($room->trang_thai == 'full' || $room->trang_thai == 'fulltime')
   <div class="row">
     <div class="col-12">
       <div class="card">
@@ -169,18 +171,41 @@
  
         <div class="modal fade" id="modal-success">
         <div class="modal-dialog">
-          <div class="modal-content bg-success">
+          <div class="modal-content ">
             <div class="modal-header">
               <h4 class="modal-title">Thanh toán thành công</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-              <p></p>
+            <div class="card" id="listOrder">
+              <div class="card-body p-0">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th style="width: 10px">#</th>
+                      <th>Dịch vụ</th>
+                      <th>Số lượng</th>
+                      <th>Đơn giá</th>
+                      <th>Thành tiền</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              <div class="card-footer clearfix">
+                  <p> <span style="width: 100px; display:inline-block">Tiền phòng:</span> <span id="roomPrice">  20000 đ </span></p>
+                  <p> <span style="width: 100px; display:inline-block">Tổng tiền: </span>  <span id="roomTotal"> 200000 đ </span></p>
+                
+                </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
             </div>
             <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-outline-light">Xuất hóa đơn</button>
+              <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-light">Xuất hóa đơn</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -198,6 +223,8 @@
     </div>
     <!-- /.card -->
   </div>
+  @endif
+
 </div>
 </div>
 <div class="modal fade" id="modal-success">
@@ -230,7 +257,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div id="modal-services" class="modal-body">
         <div>
           <div class="form-group" id="before-alert">
             <label>Sản phẩm</label>
@@ -277,6 +304,15 @@
       .select2-container--default .select2-selection--single {
         height: 38px !important;
       }
+      @media (min-width: 576px)
+      {
+      .modal-dialog {
+          max-width: 800px;
+          margin: 1.75rem auto;
+      }
+
+      }
+
     </style>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
     @stop
@@ -342,14 +378,35 @@
           })
 
           listServices.innerHTML = body;
-          console.log(body);
-          
-          
       }
+
+      let renderOrder = function(data){
+          let listServices = document.querySelector('#listOrder tbody');
+          let body = '';
+          let i = 0;
+          data.forEach(item => {
+             i ++;
+             body += `<tr> 
+                        
+                        <td> ${i} </td> 
+                        <td> ${item.ten_mat_hang} </td> 
+                        <td> ${item.so_luong} </td> 
+                        <td>${item.don_gia}</td> 
+                        <td>${item.so_luong * item.don_gia}</td> 
+                      </tr>`;
+          })
+
+          body += '<tr> '
+
+
+
+          listServices.innerHTML = body;
+      }
+
 
       let listServices = document.querySelector('#listServices tbody');
       let btnAddService = document.querySelector('#add-service');
-      let modalBody = document.querySelector('.modal-body > div');
+      let modalBody = document.querySelector('#modal-services > div');
       let nodeAfterAlert = document.querySelector('#before-alert');
 
       let alertAddService = document.createElement('div');
@@ -398,6 +455,11 @@
       */
        
        let btnCheckout = document.querySelector('#checkout');
+       let roomPrice = document.querySelector('#roomPrice');
+       let roomTotal = document.querySelector('#roomTotal');
+
+      if(btnCheckout != null){
+
        btnCheckout.addEventListener('click', function(){
 
         let url = "{{url("/admin/room/checkout")}}";
@@ -420,6 +482,13 @@
           .then(data => {
 
             console.log(data);
+            
+
+            if(data.orderDetails.length > 0){
+             renderOrder(data.orderDetails);
+            }
+            roomPrice.innerHTML = data.roomPrice;
+            roomTotal.innerHTML = data.amount;
           
           })
           .catch((err) => {
@@ -427,6 +496,9 @@
           })
 
        })
+
+      }
+
 
 
     </script>
