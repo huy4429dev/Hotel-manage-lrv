@@ -52,7 +52,7 @@
             <label>Trạng thái:</label>
             <select class="form-control" style="width: 100%;" name="trang_thai">
               <option {{ strtolower($room->trang_thai === 'maintenance') ? 'selected ' : '' }}  value="maintenance">Bảo trì</option>
-              <option {{ strtolower($room->trang_thai === 'empty') ? 'selected ' : '' }}  value="empty">Phòng trống</option>
+              <option {{ strtolower($room->trang_thai === 'Empty') ? 'selected ' : '' }}  value="empty">Phòng trống</option>
               <option {{ strtolower($room->trang_thai === 'full') ? 'selected ' : '' }}   value="full">Thêm khách hàng</option>
               <option {{ strtolower($room->trang_thai === 'fulltime') ? 'selected ' : '' }}   value="fulltime">Hết giờ</option>
             </select>

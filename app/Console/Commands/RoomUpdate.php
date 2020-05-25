@@ -45,15 +45,18 @@ class RoomUpdate extends Command
     {
         
         $rooms = Room::where('trang_thai','full')->whereHas('bookRoom', function($query){
-            $query->where('thoi_gian_ket_thuc','>=', Carbon::now()->sub('3 hours'));
+            $query->where('thoi_gian_ket_thuc','<=', Carbon::now()->add(1,'day')   ); 
+                                                                //->add(1,'day')                 
+                                                                                            
         })->get();
         
         
         foreach ($rooms as $room) {
-            $room->trang_thai = 'fulltime';
+            $room->trang_thai = 'fulltime'; // cap nhat thành fulltime 
             $room->save();
         }
 
-        print_r($rooms);  
+        echo "chạy lệnh kiểm tra thời gian của phòng !";
+
     }
 }

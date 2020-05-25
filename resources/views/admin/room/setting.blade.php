@@ -10,7 +10,7 @@
 
 @section('content')
 
-@if($config != null)
+@if($config != null) 
 <div class="row">
     <div class="col-12 col-md-3">
         <div class="card">

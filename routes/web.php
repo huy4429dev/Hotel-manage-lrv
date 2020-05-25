@@ -2,6 +2,7 @@
 
 use App\Models\Room;
 use App\Models\Service;
+use App\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,25 @@ use Illuminate\Support\Facades\Route;
 |
 |
 */
+
+
+Route::get('/make-admin',function(){
+  $admin = User::where('email','admin@gmail.com')->first();
+  if($admin == null){
+    User::create([
+      'name' => 'admin',
+      'email' => 'admin@gmail.com',
+      'phone' => '094324322',
+      'vi_tri_id' => 1,
+      'password' => bcrypt('123456')
+    ]);
+    return 'Tao tai khoan admin thanh cong';
+  }
+  else{
+    return 'Da co tai khoan admin';
+  }
+});
+
 
 Route::get('/','Page\HomeController@index');
 
@@ -167,13 +187,3 @@ Route::prefix('admin')->group(function () {
 
 
 
-Route::get('query', function(){
-    $data = DB::table('chi_tiet_hoa_don')
-    ->join('cua_hang','cua_hang.id','=','chi_tiet_hoa_don.mat_hang_id')
-    ->where('hoa_don_id', 1)
-    ->select('chi_tiet_hoa_don.*', 'cua_hang.ten_mat_hang')
-    ->get();
-    
-    print_r($data);
-    
-});

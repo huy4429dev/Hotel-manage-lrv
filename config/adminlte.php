@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'Hotel XXX',
+    'title' => 'Hotel SEA',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -45,7 +45,7 @@ return [
     |
     */
 
-    'logo' => '<b>Hotel</b> - XXX',
+    'logo' => '<b>Hotel</b> - SEA',
     'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,

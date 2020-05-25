@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Collection;
 use stdClass;
 
 class RoomController extends Controller
@@ -26,11 +27,15 @@ class RoomController extends Controller
     public function index()
     {
         //================ Get all room ==================/
-
+        $rooms = new Collection();
         $lastConfigRoom = ConfigRoom::latest()->first();
-        $countAllRoom   = Room::all()->count();
-        $offsetRoom     = $lastConfigRoom->so_phong;
-        $rooms          = Room::skip($countAllRoom - $offsetRoom)->take($offsetRoom)->get();
+        if($lastConfigRoom != null){
+            
+                    $countAllRoom   = Room::all()->count();
+                    $offsetRoom     = $lastConfigRoom->so_phong;
+                    $rooms          = Room::skip($countAllRoom - $offsetRoom)->take($offsetRoom)->get();
+
+        }
 
         return view('admin.room.index', ["rooms" => $rooms]);
     }

@@ -16,8 +16,7 @@ class ContactController extends Controller
             'chu_de' => $request->chu_de,
             'noi_dung' => $request->noi_dung,
             "trang_thai" => 0
-        ]);
-        
+        ]); 
         return response()->json($request->all());
     }
 }

@@ -10,6 +10,13 @@
  * Copyright 2011-2019 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
+@font-face {
+  font-family: Roboto;
+  src: url("../assets/font/Roboto-Regular.ttf") format("truetype"),
+    url("../assets/font/Roboto-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
 :root {
   --blue: #007bff;
   --indigo: #6610f2;
@@ -477,7 +484,10 @@ mark,
 
 .img-fluid {
   max-width: 100%;
-  height: auto;
+  height: 156px;
+}
+.img-set{
+  width: 100%;
 }
 
 .img-thumbnail {
@@ -10087,29 +10097,68 @@ img::-moz-selection {
     margin-right: 0;
   }
 }
+/*.masthead .overlay{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: black;
+  opacity: 0.3;
+}
+*/
+.masthead .f-over{
+  position: relative;
+  z-index: 1;
+  
+}
 header.masthead {
   padding-top: 10.5rem;
   padding-bottom: 6rem;
   text-align: center;
   color: #fff;
-  background-image: url("../assets/img/banner.png");
+  background-image: url("../images/ks8.jpg");
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: center center;
   background-size: cover;
+  position: relative;
+  height: 100vh;
+}
+header.masthead::after{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  content: '';
+  top: 0;
+  left: 0;
+  background: linear-gradient(180deg, rgba(36, 34, 105, 0.1) 0%, rgba(36, 34, 105, 0.7) 82.66%);
 }
 header.masthead .masthead-subheading {
   font-size: 1.5rem;
   font-style: italic;
   line-height: 1.5rem;
-  margin-bottom: 25px;
-  font-family: "Droid Serif", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* margin-bottom: 25px; */
+ 
+}
+.flex{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.border-line{
+  height: 2px;
+  background-color: #D5A576;
+  width: 100px;
+  margin-right: 20px;
 }
 header.masthead .masthead-heading {
   font-size: 3.25rem;
-  font-weight: 700;
+  font-weight: initial;
   line-height: 3.25rem;
-  margin-bottom: 2rem;
+  
   font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
@@ -10122,11 +10171,11 @@ header.masthead .masthead-heading {
     font-size: 2.25rem;
     font-style: italic;
     line-height: 2.25rem;
-    margin-bottom: 2rem;
+    /* margin-bottom: 2rem;  */
   }
   header.masthead .masthead-heading {
     font-size: 4.5rem;
-    font-weight: 700;
+    /* font-weight: 700; */
     line-height: 4.5rem;
     margin-bottom: 4rem;
   }
@@ -10465,6 +10514,5 @@ a.navbar-brand.js-scroll-trigger {
 }
 
 .masthead-subheading {
-  font-family: monospace !important;
   font-style: normal !important;
 }

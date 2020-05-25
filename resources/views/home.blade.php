@@ -16,16 +16,26 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet" />
+    
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <style>
+        .masthead-subheading{
+            font-weight: 400;
+            color: #D5A576;
+            font-style: normal;
+            letter-spacing: 6px;
 
+                       
+        }
+    </style>
 </head>
 
 <body id="page-top">
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container">
-            <a class="navbar-brand js-scroll-trigger" href="#page-top">Hotel XXX</a><button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">Menu<i class="fas fa-bars ml-1"></i></button>
+            <a class="navbar-brand js-scroll-trigger" href="#page-top">SEA HOTEL </a><button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">Menu<i class="fas fa-bars ml-1"></i></button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav text-uppercase ml-auto">
                     <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#services">Dịch Vụ</a></li>
@@ -39,33 +49,38 @@
     </nav>
     <!-- Masthead-->
     <header class="masthead">
-        <div class="container">
-            <div class="masthead-subheading">Chào mừng đến với HOTEL XXX </div>
-            <div class="masthead-heading text-uppercase">NƠI TINH HOA HỘI TỤ</div>
+    
+        <div class="container f-over">
+            <div class="masthead-heading text-uppercase">Chào mừng đến với SEAHOTEL</div>
+            <div class='flex'>  <div class='border-line'></div>
+            <div class="masthead-subheading">HOTEL & RESORTS</div><div class='border-line'></div></div>  
+            
         </div>
+        <div class="overlay"></div>
+        
     </header>
     <!-- Services-->
     <section class="page-section" id="services">
         <div class="container">
             <div class="text-center">
                 <h2 class="section-heading text-uppercase">DỊCH VỤ</h2>
-                <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+                <h3 class="section-subheading text-muted">KHÁCH SẠN HÀNG ĐẦU CỬA LÒ</h3>
             </div>
             <div class="row text-center">
                 <div class="col-md-4">
-                    <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas fa-shopping-cart fa-stack-1x fa-inverse"></i></span>
-                    <h4 class="my-3">E-Commerce</h4>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                    <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas fa-utensils fa-stack-1x fa-inverse"></i></span>
+                    <h4 class="my-3">Những trải nghiệm đáng nhớ cùng kỳ nghỉ sang trọng tại SEAHotel</h4>
+                    <p class="text-muted">Nằm bên bờ Biển Cửa Lò, SEAHotel mang đến cảm giác yên bình. Tọa lạc ngay trong thị xã Cửa Lò, từ khách sạn SEAHotel bạn có thể dễ dàng khám khá những điểm đến hấp dẫn của Cửa Lò.</p>
                 </div>
                 <div class="col-md-4">
-                    <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas fa-laptop fa-stack-1x fa-inverse"></i></span>
-                    <h4 class="my-3">Responsive Design</h4>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                    <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas fa-heart fa-stack-1x fa-inverse"></i></span>
+                    <h4 class="my-3">Tại khách sạn SEAHotel chúng tôi phục vụ bằng cả trái tim!</h4>
+                    <p class="text-muted">Tại khách sạn SEAHotel, đội ngũ nhân viên thân thiện và chuyên nghiệp của chúng tôi luôn sẵn sàng phục vụ quý khách với “lòng hiếu khách và yêu mến chân thành”.</p>
                 </div>
                 <div class="col-md-4">
-                    <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas fa-lock fa-stack-1x fa-inverse"></i></span>
-                    <h4 class="my-3">Web Security</h4>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                    <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas fa-hotel fa-stack-1x fa-inverse"></i></span>
+                    <h4 class="my-3">Nơi nghỉ dưỡng sang trọng hoàn hảo cho kỳ nghỉ của bạn tại Cửa Lò</h4>
+                    <p class="text-muted">Được trang bị hiện đại với tiện nghi sang trọng và tinh tế trong một không gian hài hòa với hướng nhìn ra biển, SeaHotel là nơi nghỉ dưỡng mang đến nhiều lựa chọn phù hợp với từng nhu cầu nghỉ dưỡng và ngân sách của bạn.</p>
                 </div>
             </div>
         </div>
@@ -75,7 +90,7 @@
         <div class="container">
             <div class="text-center">
                 <h2 class="section-heading text-uppercase">TIN TỨC</h2>
-                <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+                <h3 class="section-subheading text-muted"></h3>
             </div>
             <div class="row">
                 @if(!$posts->isEmpty())
@@ -87,7 +102,7 @@
                             <div class="portfolio-hover">
                                 <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="{{$post->hinh_anh}}" alt="" />
+                            <img class="img-set img-fluid" src="{{$post->hinh_anh}}" alt="" />
                         </a>
                         <div class="portfolio-caption">
                             <div class="portfolio-caption-heading">{{$post->tieu_de}}</div>
@@ -107,54 +122,55 @@
         <div class="container">
             <div class="text-center">
                 <h2 class="section-heading text-uppercase">GIỚI THIỆU</h2>
-                <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+                <h3 class="section-subheading text-muted">Với 265 phòng nghỉ và Trung tâm hội nghị lớn nhất thị xã, Hotels & Resorts SEA là sự lựa chọn hoàn hảo cho khách muốn lưu trú và là nơi lý tưởng để tổ chức đa dạng các sự kiện</h3>
             </div>
             <ul class="timeline">
                 <li>
-                    <div class="timeline-image"><img class="rounded-circle img-fluid" src="assets/img/about/1.jpg" alt="" /></div>
+                    
+                    <div class="timeline-image" ><img class="rounded-circle img-fluid" src="assets/img/about/ks14.jpg" alt="" /></div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
-                            <h4>2009-2011</h4>
-                            <h4 class="subheading">Our Humble Beginnings</h4>
+                            <h4></h4>
+                            <h4 class="subheading">Tổ chức sự kiện</h4>
                         </div>
                         <div class="timeline-body">
-                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                            <p class="text-muted">Sở hữu phòng đại tiệc lớn nhất thị xã Cửa Lò và những phòng chức năng đa dạng, Khách sạn SEAHotel chính là sự lựa chọn hoàn hảo cho tất cả những sự kiện của cá nhân cũng như của công ty.</p>
                         </div>
                     </div>
                 </li>
                 <li class="timeline-inverted">
-                    <div class="timeline-image"><img class="rounded-circle img-fluid" src="assets/img/about/2.jpg" alt="" /></div>
+                    <div class="timeline-image"><img class="rounded-circle img-fluid" src="assets/img/about/ks15.jpg" alt="" /></div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
-                            <h4>March 2011</h4>
-                            <h4 class="subheading">An Agency is Born</h4>
+                            <h4></h4>
+                            <h4 class="subheading">Ẩm thực</h4>
                         </div>
                         <div class="timeline-body">
-                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                            <p class="text-muted">Ẩm thực châu Á -Europe với các món ăn truyền thống Việt Nam được tạo ra thực đơn đa dạng của nhà hàng. Không gian của nhà hàng vô cùng thanh lịch với tông màu tươi sáng .</p>
                         </div>
                     </div>
                 </li>
                 <li>
-                    <div class="timeline-image"><img class="rounded-circle img-fluid" src="assets/img/about/3.jpg" alt="" /></div>
+                    <div class="timeline-image"><img class="rounded-circle img-fluid" src="assets/img/about/ks16.jpg" alt="" /></div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
-                            <h4>December 2012</h4>
-                            <h4 class="subheading">Transition to Full Service</h4>
+                            <h4></h4>
+                            <h4 class="subheading">Tiêu chuẩn 5 sao</h4>
                         </div>
                         <div class="timeline-body">
-                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                            <p class="text-muted">Khách sạn cung cấp những dịch vụ hoàn hảo tiêu chuẩn 5 sao với giá trị vượt trên cả mong đợi, chúng tôi không chỉ mang đến cho khách du lịch một kỳ nghỉ thoải mái ..</p>
                         </div>
                     </div>
                 </li>
                 <li class="timeline-inverted">
-                    <div class="timeline-image"><img class="rounded-circle img-fluid" src="assets/img/about/4.jpg" alt="" /></div>
+                    <div class="timeline-image"><img class="rounded-circle img-fluid" src="assets/img/about/ks17.jpg" alt="" /></div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
-                            <h4>July 2014</h4>
-                            <h4 class="subheading">Phase Two Expansion</h4>
+                            <h4></h4>
+                            <h4 class="subheading">Danh Sách Phòng</h4>
                         </div>
                         <div class="timeline-body">
-                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                            <p class="text-muted">Hiện đại và tiện nghi, với diện tích từ 34 m2, tất cả các phòng đều có ban công và tầm nhìn toàn cảnh ra thị xã Cửa Lò</p>
                         </div>
                     </div>
                 </li>
@@ -171,37 +187,37 @@
         <div class="container">
             <div class="text-center">
                 <h2 class="section-heading text-uppercase">QUẢN TRỊ</h2>
-                <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+                <h3 class="section-subheading text-muted">Giám đốc và CBNV</h3>
             </div>
             <div class="row">
                 <div class="col-lg-4">
                     <div class="team-member">
-                        <img class="mx-auto rounded-circle" src="assets/img/team/1.jpg" alt="" />
-                        <h4>Kay Garland</h4>
-                        <p class="text-muted">Lead Designer</p>
+                        <img class="mx-auto rounded-circle" src="assets/img/team/giphy.gif" alt="" />
+                        <h4>Kayn</h4>
+                        <p class="text-muted">CEO</p>
                         <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a><a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a><a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="team-member">
-                        <img class="mx-auto rounded-circle" src="assets/img/team/2.jpg" alt="" />
-                        <h4>Larry Parker</h4>
-                        <p class="text-muted">Lead Marketer</p>
+                        <img class="mx-auto rounded-circle" src="assets/img/team/y.jpg" alt="" />
+                        <h4>Riven</h4>
+                        <p class="text-muted">CTO</p>
                         <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a><a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a><a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="team-member">
-                        <img class="mx-auto rounded-circle" src="assets/img/team/3.jpg" alt="" />
-                        <h4>Diana Petersen</h4>
-                        <p class="text-muted">Lead Developer</p>
+                        <img class="mx-auto rounded-circle" src="assets/img/team/t.gif" alt="" />
+                        <h4>Shen</h4>
+                        <p class="text-muted">CGO</p>
                         <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a><a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a><a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-8 mx-auto text-center">
-                    <p class="large text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut eaque, laboriosam veritatis, quos non quis ad perspiciatis, totam corporis ea, alias ut unde.</p>
+                    <p class="large text-muted"></p>
                 </div>
             </div>
         </div>
@@ -230,7 +246,7 @@
         <div class="container">
             <div class="text-center">
                 <h2 class="section-heading text-uppercase">LIÊN HỆ</h2>
-                <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+                <h3 class="section-subheading text-muted">Ý kiến của bạn là góp phần cho sự phát triển của chúng tôi</h3>
             </div>
             <form id="contactForm" name="sentMessage" novalidate="novalidate" method="POST">
                 <div class="row align-items-stretch mb-5">
