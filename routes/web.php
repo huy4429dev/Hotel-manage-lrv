@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Order;
 use App\Models\Room;
 use App\Models\Service;
 use App\User;
@@ -17,9 +18,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/make-admin',function(){
-  $admin = User::where('email','admin@gmail.com')->first();
-  if($admin == null){
+Route::get('/make-admin', function () {
+  $admin = User::where('email', 'admin@gmail.com')->first();
+  if ($admin == null) {
     User::create([
       'name' => 'admin',
       'email' => 'admin@gmail.com',
@@ -28,16 +29,15 @@ Route::get('/make-admin',function(){
       'password' => bcrypt('123456')
     ]);
     return 'Tao tai khoan admin thanh cong';
-  }
-  else{
+  } else {
     return 'Da co tai khoan admin';
   }
 });
 
 
-Route::get('/','Page\HomeController@index');
+Route::get('/', 'Page\HomeController@index');
 
-Route::post('/contact','Page\ContactController@contact');
+Route::post('/contact', 'Page\ContactController@contact');
 
 
 
@@ -68,12 +68,12 @@ Route::prefix('admin')->group(function () {
     */
 
   Route::prefix('room')->group(function () {
-        /*
+    /*
             Thanh toán
     */
 
     Route::post('/checkout', 'Admin\RoomController@checkOut');
-    
+
     Route::get('/', 'Admin\RoomController@index');
     Route::get('/map', 'Admin\RoomController@getMap');
 
@@ -85,7 +85,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/setting/create', 'Admin\RoomController@setting');
     Route::post('/setting/update', 'Admin\RoomController@configFloor');
 
-    Route::get('/{id}', 'Admin\RoomController@show');
+    Route::get('/{id}', 'Admin\RoomController@show')->name('room.detail');
 
     /*
             Cập nhật room - Đặt phòng - Bảo trì 
@@ -100,21 +100,27 @@ Route::prefix('admin')->group(function () {
     Route::post('/add-service/{id}', 'Admin\RoomController@addService');
 
 
+    /*
+            Chuyển phòng
+    */
 
+    Route::post('cp/replace-room', 'Admin\RoomController@ReplaceRoom')->name('room.replace');
   });
 
-  
+
   /*========================================================
       Quản lý doanh thu
       ========================================================
   */
-  
+
 
   Route::prefix('order')->group(function () {
 
-      Route::get('/', 'Admin\OrderController@index')->name('admin.order.index');
-      Route::get('/{id}', 'Admin\OrderController@detail')->name('admin.order.detail');
-
+    Route::get('/', 'Admin\OrderController@index')->name('admin.order.index');
+    Route::get('/group', 'Admin\OrderController@group')->name('admin.order.group');
+    Route::post('/group', 'Admin\OrderController@groupPost')->name('admin.order.group.post');
+    Route::get('/{id}', 'Admin\OrderController@detail')->name('admin.order.detail');
+    Route::get('/ex/export', 'Admin\OrderController@export')->name('admin.order.export');
   });
 
 
@@ -187,3 +193,46 @@ Route::prefix('admin')->group(function () {
 
 
 
+Route::post('/export', 'ExportController@export')->name('export');
+
+
+Route::get('query', function () {
+  $data = Order::select(DB::raw('sum(tong_tien) as `tongtien`'), DB::raw("CONCAT_WS('-',MONTH(created_at),YEAR(created_at)) as monthyear"))
+    ->whereRaw(DB::raw('YEAR(created_at) = 2020'))
+    ->groupBy('monthyear')
+    ->orderBy('monthyear', 'asc')
+    ->get();
+  return $data;
+  $data_thu = [
+    ($data[0]->tongtien ?? 0 ) / 1000000 ,
+    ($data[1]->tongtien ?? 0 ) / 1000000 ,
+    ($data[2]->tongtien ?? 0 ) / 1000000 ,
+    ($data[3]->tongtien ?? 0 ) / 1000000 ,
+    ($data[4]->tongtien ?? 0 ) / 1000000 ,
+    ($data[5]->tongtien ?? 0 ) / 1000000 ,
+    ($data[6]->tongtien ?? 0 ) / 1000000 ,
+    ($data[7]->tongtien ?? 0 ) / 1000000 ,
+    ($data[8]->tongtien ?? 0 ) / 1000000 ,
+    ($data[9]->tongtien ?? 0 ) / 1000000 ,
+    ($data[10]->tongtien ?? 0 ) / 1000000 ,
+    ($data[11]->tongtien ?? 0 ) / 1000000 ,
+    ($data[12]->tongtien ?? 0 ) / 1000000 ,
+  ];
+
+  $data_chi = [
+      rand(10000000, 50000000) / 1000000 ,
+      rand(10000000, 50000000) / 1000000,
+      rand(10000000, 50000000) / 1000000,
+      rand(10000000, 50000000) / 1000000,
+      rand(10000000, 50000000) / 1000000,
+      rand(10000000, 50000000) / 1000000,
+      rand(10000000, 50000000) / 1000000,
+      rand(10000000, 50000000) / 1000000,
+      rand(10000000, 50000000) / 1000000,
+      rand(10000000, 50000000) / 1000000,
+      rand(10000000, 50000000) / 1000000,
+      rand(10000000, 50000000) / 1000000,
+  ];
+
+        return response(['data' => [$data_chi ,$data_thu]]);  
+});

@@ -29,12 +29,11 @@ class RoomController extends Controller
         //================ Get all room ==================/
         $rooms = new Collection();
         $lastConfigRoom = ConfigRoom::latest()->first();
-        if($lastConfigRoom != null){
-            
-                    $countAllRoom   = Room::all()->count();
-                    $offsetRoom     = $lastConfigRoom->so_phong;
-                    $rooms          = Room::skip($countAllRoom - $offsetRoom)->take($offsetRoom)->get();
+        if ($lastConfigRoom != null) {
 
+            $countAllRoom   = Room::all()->count();
+            $offsetRoom     = $lastConfigRoom->so_phong;
+            $rooms          = Room::skip($countAllRoom - $offsetRoom)->take($offsetRoom)->get();
         }
 
         return view('admin.room.index', ["rooms" => $rooms]);
@@ -92,6 +91,7 @@ class RoomController extends Controller
                             where phong.id = $id and ( trang_thai = 'full' or trang_thai = 'fulltime' ) and dich_vu.trang_thai_dv = 0
                             group by cua_hang.ten_mat_hang, cua_hang.don_gia
                         ");
+         $roomEmpty = Room::where('trang_thai','empty')->get();
 
         if ($room->trang_thai == 'full'  ||  $room->trang_thai == 'fulltime') {
 
@@ -100,11 +100,13 @@ class RoomController extends Controller
             $statusInfo = $customer->ho_ten;
             $status     =  $room->trang_thai == 'full' ? "info" : 'warning';
 
-            return view('admin.room.detail', ["room" => $room, 'status' => $status, "statusInfo" => $statusInfo, 'customer' => $customer, 'bookRoom' => $bookRoom, 'products' => $products, 'listServices' => $listServices]);
+
+
+            return view('admin.room.detail', ["room" => $room, 'status' => $status, "statusInfo" => $statusInfo, 'customer' => $customer, 'bookRoom' => $bookRoom, 'products' => $products, 'listServices' => $listServices, 'roomEmpty' => $roomEmpty]);
         }
 
 
-        return view('admin.room.detail', ["room" => $room, 'status' => $status, "statusInfo" => $statusInfo, 'bookRoom' => $bookRoom, 'products' => $products, 'listServices' => $listServices]);
+        return view('admin.room.detail', ["room" => $room, 'status' => $status, "statusInfo" => $statusInfo, 'bookRoom' => $bookRoom, 'products' => $products, 'listServices' => $listServices, 'roomEmpty' => $roomEmpty]);
     }
 
     public function roomUpdate(Request $request, $id)
@@ -198,8 +200,8 @@ class RoomController extends Controller
 
         $product = Store::find($request->mat_hang_id);
 
-   
-            $listServices = DB::select("select cua_hang.ten_mat_hang , cua_hang.don_gia as don_gia, sum(dich_vu.so_luong) as so_luong
+
+        $listServices = DB::select("select cua_hang.ten_mat_hang , cua_hang.don_gia as don_gia, sum(dich_vu.so_luong) as so_luong
                                 from phong 
                                 join dich_vu 
                                 on dich_vu.phong_id = phong.id 
@@ -216,24 +218,24 @@ class RoomController extends Controller
                 'so_luong'     => $request->so_luong,
                 'don_gia'      => $product->don_gia
             ],
-            'listServices' => $listServices ,
+            'listServices' => $listServices,
             'message' => 'Đã thêm dịch vụ .'
         ]);
     }
 
-    public function checkOut(Request $request){
+    public function checkOut(Request $request)
+    {
 
-         
+
         $room = Room::find($request->roomId);
-        $order = Order::where('phong_id',$request->roomId)->get()->last();
+        $order = Order::where('phong_id', $request->roomId)->get()->last();
         $timeOut = BookRoom::where('phong_id', $request->roomId)->get()->last()->thoi_gian_dat;
         $roomPrice = $order->tong_tien * $timeOut;
         $amount = $order->tong_tien * $timeOut;
-        $services = Service::where('phong_id','=',$request->roomId)->where('trang_thai_dv','=',0)->get();
-        if(!$services->isEmpty())
-        {
+        $services = Service::where('phong_id', '=', $request->roomId)->where('trang_thai_dv', '=', 0)->get();
+        if (!$services->isEmpty()) {
             foreach ($services as $service) {
-                
+
                 OrderDetail::create([
                     'hoa_don_id'  => $order->id,
                     'mat_hang_id' => $service->mat_hang_id,
@@ -243,7 +245,7 @@ class RoomController extends Controller
                 ]);
 
                 $amount +=  $service->product->don_gia * $service->so_luong;
-                
+
                 $service->trang_thai_dv = 1;
                 $service->save();
             }
@@ -251,18 +253,20 @@ class RoomController extends Controller
 
         $order->tong_tien = $amount;
 
+        
+
         $order->save();
 
         $room->trang_thai = 'maintenance';
         $room->save();
-        
-        $orderDetails = DB::table('chi_tiet_hoa_don')
-                        ->join('cua_hang','cua_hang.id','=','chi_tiet_hoa_don.mat_hang_id')
-                        ->where('hoa_don_id', $order->id)
-                        ->select('chi_tiet_hoa_don.*', 'cua_hang.ten_mat_hang')
-                        ->get();
 
-        return response()->json(['orderDetails' => $orderDetails, 'amount' => $amount, 'roomPrice' => $roomPrice]);
+        $orderDetails = DB::table('chi_tiet_hoa_don')
+            ->join('cua_hang', 'cua_hang.id', '=', 'chi_tiet_hoa_don.mat_hang_id')
+            ->where('hoa_don_id', $order->id)
+            ->select('chi_tiet_hoa_don.*', 'cua_hang.ten_mat_hang')
+            ->get();
+
+        return response()->json(['orderDetails' => $orderDetails, 'amount' => $amount, 'roomPrice' => $roomPrice , 'id' => $order->id ]);
     }
 
 
@@ -377,5 +381,38 @@ class RoomController extends Controller
             return Redirect::Back()->with('success', 'Thiết lập thành công !');
         };
         return Redirect::back()->withErrors(['msg' => 'Vui lòng thiết lập lại số phòng !']);
+    }
+
+    public function ReplaceRoom(Request $request)
+    {
+          //================ Add Book room  =================//
+
+          $roomNew = Room::find($request->roomNew);
+          $roomOld = Room::find($request->roomOld);
+          $roomNew->trang_thai = "full";
+          $roomOld->trang_thai = "empty";
+          $roomNew->loai_phong_id  =   $roomOld->loai_phong_id;
+          $roomNew->save();
+          $roomOld->save();
+          
+
+          $bookRoom = BookRoom::where('phong_id',$roomOld->id)->get()->last();
+          $bookRoom->phong_id = $roomNew->id;
+          $bookRoom->save();
+  
+          //================ Add Order    =================//
+
+          $order = Order::where('phong_id',$roomOld->id)->get()->last();
+          $order->phong_id = $roomNew->id;
+          $order->save();
+
+          $services = Service::where('phong_id',$roomOld->id)->get()->last();
+          if($services != null){
+              
+              $services->phong_id = $roomNew->id;
+              $services->save();
+          }
+  
+          return redirect()->route('room.detail',$roomNew->id);
     }
 }

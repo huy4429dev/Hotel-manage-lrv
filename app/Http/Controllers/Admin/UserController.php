@@ -60,4 +60,8 @@ class UserController extends Controller
 
         return back()->with('message', 'Cập nhật hồ sơ thành công');
     }
+
+
+
+
 }

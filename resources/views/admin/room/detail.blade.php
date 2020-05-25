@@ -7,7 +7,12 @@
 <div class="container-fluid d-flex justify-content-between">
   <h4>Chi tiết phòng:</h4>
   @if($bookRoom->thoi_gian_ket_thuc != null)
+  <div class="d-flex">
+  <button type="button" class="btn btn-default mr-3" data-toggle="modal" data-target="#replace-room">
+    Chuyển phòng
+  </button>
   <div id="clock" class="clock"></div>
+  </div>
   @endif
 </div>
 @stop
@@ -205,7 +210,11 @@
             </div>
             <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-light">Xuất hóa đơn</button>
+              <form action="{{route('export')}}" method="post">
+                 @csrf
+                 <input id="orderId" type="hidden" name="orderId" value="">
+                <button type="submit" class="btn btn-light">Xuất hóa đơn</button>
+              </form>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -286,7 +295,40 @@
     </div>
   </div>
 </div>
-
+<div class="modal fade" id="replace-room">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Chuyển phòng</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form action="{{route('room.replace')}}" method="POST">
+              @csrf
+              <div class="modal-body">
+                <div class="form-group">
+                    <select class="form-control" name="roomNew" id="">
+                     @if(!$roomEmpty->isEmpty())
+                     @foreach($roomEmpty as $x)
+                      <option value="{{$x->id}}">{{$x->ma_phong}}</option>
+                     @endforeach
+                     @endif
+                    </select>
+                    <input name="roomOld" type="hidden" value="{{$room->id}}"> 
+                </div>
+              </div>
+              <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <button type="submit" class="btn btn-primary">Chuyển</button>
+              </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
     @stop
 
     @section('css')
@@ -457,6 +499,7 @@
        let btnCheckout = document.querySelector('#checkout');
        let roomPrice = document.querySelector('#roomPrice');
        let roomTotal = document.querySelector('#roomTotal');
+       let orderId = document.querySelector('#orderId');
 
       if(btnCheckout != null){
 
@@ -489,6 +532,7 @@
             }
             roomPrice.innerHTML = data.roomPrice;
             roomTotal.innerHTML = data.amount;
+            orderId.value   = data.id;
           
           })
           .catch((err) => {
