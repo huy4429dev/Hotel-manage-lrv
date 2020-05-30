@@ -222,8 +222,6 @@ return [
             'text'        => 'Dashboard',
             'url'         => 'admin/dashboard',
             'icon'        => 'fas fa-home',
-            'label'       => 4,
-            'label_color' => 'success',
         ],
         ['header' => 'account_settings'],
         [

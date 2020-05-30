@@ -58,7 +58,7 @@ class RoomUpdate extends Command
                 $room->trang_thai = 'fulltime'; // cap nhat thành fulltime 
                 $room->save();
             }
-        }
+    }
 
         echo "chạy lệnh kiểm tra thời gian của phòng !";
 

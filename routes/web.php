@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Room;
 use App\User;
 use Illuminate\Support\Facades\Route;
 
@@ -73,6 +74,7 @@ Route::prefix('admin')->group(function () {
   
     Route::get('book', 'Admin\RoomController@listBook')->name('room.book.list');
     Route::get('book/{id}', 'Admin\RoomController@bookDetail')->name('room.book.detail');
+    Route::post('book/{id}', 'Admin\RoomController@bookDetailUpdate')->name('room.book.update');
     /*
           Thanh toán
     */
@@ -206,4 +208,7 @@ Route::post('/export', 'ExportController@export')->name('export');
 
 
 Route::get('query', function () {
+   $rooms =  Room::select('*')->whereNotIn('book_price', [100,200])->get();
+   
+   return $rooms;
 });

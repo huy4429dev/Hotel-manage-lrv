@@ -27,6 +27,11 @@ class Room extends Model
         return $this->hasMany('App\Models\BookRoom','phong_id');
     }
 
+    public function bookOnline()
+    {
+        return $this->hasMany('App\Models\BookOnline','phong_id');
+    }
+
     public function service(){
         return $this->hasMany('App\Models\Service','phong_id');
     }

@@ -426,7 +426,19 @@ class RoomController extends Controller
         return view('admin.room.listbook',['list' => $list]);
     }
     public function bookDetail($id){
+
         $book = BookOnline::find($id);
-        return view('admin.room.bookdetail',['book' => $book]);
+        $rooms = Room::all();
+        return view('admin.room.bookdetail',['book' => $book,'rooms' => $rooms]);
+    }
+
+    public function bookDetailUpdate(Request $request ,$id){
+
+        $book = BookOnline::find($id);
+        $book->phong_id = $request->phong_id;
+        $book->trang_thai = 1;
+        $book->save();
+
+        return redirect()->back()->with('bookUpdate' , 'Thiết lập thành công');
     }
 }
