@@ -68,10 +68,15 @@
 
                 <div class="info-box-content">
                     <a href="{{url('admin/room/' . $room->id)}}">
-                        <span class="info-box-text">{{$room->ma_phong}}</span>
-                        <span class="info-box-number">
-                            <small>{{$roomInfo ?? ''}}</small>
-                        </span>
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <span class="info-box-text">{{$room->ma_phong}}</span>
+                                <span class="info-box-number">
+                                    <small>{{$roomInfo ?? ''}}</small>
+                                </span>
+                            </div>
+                            <span>{{$room->trang_thai == 'full' ?   Date("h : i - d / m", strtotime($room->bookRoom->last()->thoi_gian_ket_thuc)) : ''}}</span>
+                        </div>
                     </a>
                 </div>
                 <!-- /.info-box-content -->

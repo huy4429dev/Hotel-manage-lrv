@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\BookOnline;
 use App\Models\BookRoom;
 use App\Models\ConfigRoom;
 use App\Models\Customer;
@@ -91,7 +92,7 @@ class RoomController extends Controller
                             where phong.id = $id and ( trang_thai = 'full' or trang_thai = 'fulltime' ) and dich_vu.trang_thai_dv = 0
                             group by cua_hang.ten_mat_hang, cua_hang.don_gia
                         ");
-         $roomEmpty = Room::where('trang_thai','empty')->get();
+        $roomEmpty = Room::where('trang_thai', 'empty')->get();
 
         if ($room->trang_thai == 'full'  ||  $room->trang_thai == 'fulltime') {
 
@@ -142,7 +143,7 @@ class RoomController extends Controller
         if ($customer == null) {
             $customer =  Customer::create(
                 [
-                    'so_cmnd' => $request->so_cmnd,
+                'so_cmnd' => $request->so_cmnd,
                     'ho_ten' => $request->ho_ten,
                     'so_dien_thoai' => $request->so_dien_thoai,
                     'so_lan_dat_phong' => 1
@@ -224,14 +225,18 @@ class RoomController extends Controller
     }
 
     public function checkOut(Request $request)
-    {
-
-
+    { 
+        $now = Carbon::now();
+        $timeStart = BookRoom::where('phong_id', $request->roomId)->get()->last()->created_at;
+        $d =  $now->diff($timeStart)->format('%D');
+        $h =  $now->diff($timeStart)->format('%H');
+        $i =  $now->diff($timeStart)->format('%I');
+    
+        $totalHourd = ( $d * 24 * 60 + $h * 60  + $i ) / 60;   
         $room = Room::find($request->roomId);
         $order = Order::where('phong_id', $request->roomId)->get()->last();
-        $timeOut = BookRoom::where('phong_id', $request->roomId)->get()->last()->thoi_gian_dat;
-        $roomPrice = $order->tong_tien * $timeOut;
-        $amount = $order->tong_tien * $timeOut;
+        $roomPrice = round($order->tong_tien * $totalHourd);
+        $amount = round($order->tong_tien * $totalHourd);
         $services = Service::where('phong_id', '=', $request->roomId)->where('trang_thai_dv', '=', 0)->get();
         if (!$services->isEmpty()) {
             foreach ($services as $service) {
@@ -253,7 +258,7 @@ class RoomController extends Controller
 
         $order->tong_tien = $amount;
 
-        
+
 
         $order->save();
 
@@ -385,34 +390,43 @@ class RoomController extends Controller
 
     public function ReplaceRoom(Request $request)
     {
-          //================ Add Book room  =================//
+        //================ Add Book room  =================//
 
-          $roomNew = Room::find($request->roomNew);
-          $roomOld = Room::find($request->roomOld);
-          $roomNew->trang_thai = "full";
-          $roomOld->trang_thai = "empty";
-          $roomNew->loai_phong_id  =   $roomOld->loai_phong_id;
-          $roomNew->save();
-          $roomOld->save();
-          
+        $roomNew = Room::find($request->roomNew);
+        $roomOld = Room::find($request->roomOld);
+        $roomNew->trang_thai = "full";
+        $roomOld->trang_thai = "empty";
+        $roomNew->loai_phong_id  =   $roomOld->loai_phong_id;
+        $roomNew->save();
+        $roomOld->save();
 
-          $bookRoom = BookRoom::where('phong_id',$roomOld->id)->get()->last();
-          $bookRoom->phong_id = $roomNew->id;
-          $bookRoom->save();
-  
-          //================ Add Order    =================//
 
-          $order = Order::where('phong_id',$roomOld->id)->get()->last();
-          $order->phong_id = $roomNew->id;
-          $order->save();
+        $bookRoom = BookRoom::where('phong_id', $roomOld->id)->get()->last();
+        $bookRoom->phong_id = $roomNew->id;
+        $bookRoom->save();
 
-          $services = Service::where('phong_id',$roomOld->id)->get()->last();
-          if($services != null){
-              
-              $services->phong_id = $roomNew->id;
-              $services->save();
-          }
-  
-          return redirect()->route('room.detail',$roomNew->id);
+        //================ Add Order    =================//
+
+        $order = Order::where('phong_id', $roomOld->id)->get()->last();
+        $order->phong_id = $roomNew->id;
+        $order->save();
+
+        $services = Service::where('phong_id', $roomOld->id)->get()->last();
+        if ($services != null) {
+
+            $services->phong_id = $roomNew->id;
+            $services->save();
+        }
+
+        return redirect()->route('room.detail', $roomNew->id);
+    }
+
+    public function listBook(){
+        $list = BookOnline::orderBy('id','desc')->paginate(10);
+        return view('admin.room.listbook',['list' => $list]);
+    }
+    public function bookDetail($id){
+        $book = BookOnline::find($id);
+        return view('admin.room.bookdetail',['book' => $book]);
     }
 }

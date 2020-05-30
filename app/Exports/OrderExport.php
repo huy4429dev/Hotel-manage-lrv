@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\BookRoom;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -32,18 +33,44 @@ class OrderExport implements FromCollection, WithHeadings, ShouldAutoSize, WithE
                 '4' => $row->mat_hang_id,
                 '5' => $row->created_at,
             );
-            $i ++;
+            $i++;
         }
-        
+
+        $order[] = array(
+            [
+                0 => '',
+                1 => '',
+                2 => '',
+                3 => '',
+                4 => '',
+                5 => '',
+            ],
+            [
+                0 => '',
+                1 => '',
+                2 => '',
+                3 => '',
+                4 => '',
+                5 => '',
+            ]
+        );
+
+        $order[] = array(
+            '0' => '',
+            '1' => '',
+            '2' => '',
+            '3' => 'Tiền phòng',
+            '4' => number_format(Order::find($this->id)->tong_tien - OrderDetail::where('hoa_don_id', $this->id)->get()->sum('thanh_tien')) . ' vnđ',
+        );
+        $order[] = array(
+            '0' => '',
+            '1' => '',
+            '2' => '',
+            '3' => 'Tổng tiền',
+            '4' => number_format(Order::find($this->id)->tong_tien) . ' vnđ',
+
+        );
         $order[] = array([
-            0 => '',
-            1 => '',
-            2 => '',
-            3 => '',
-            4 => '',
-            5 => '',
-        ],
-        [
             0 => '',
             1 => '',
             2 => '',
@@ -56,15 +83,27 @@ class OrderExport implements FromCollection, WithHeadings, ShouldAutoSize, WithE
             '0' => '',
             '1' => '',
             '2' => '',
-            '3' => 'Tiền phòng',
-            '4' => number_format(Order::find($this->id)->room->typeroom->gia_phong *  Order::find($this->id)->room->bookRoom->last()->thoi_gian_dat ). ' vnđ',
+            '3' => 'Khách hàng',
+            '4' => Order::find($this->id)->customer->ho_ten,
+
         );
+
         $order[] = array(
             '0' => '',
             '1' => '',
             '2' => '',
-            '3' => 'Tổng tiền',
-            '4' => number_format(Order::find($this->id)->tong_tien). ' vnđ',
+            '3' => 'Số điện thoại',
+            '4' => Order::find($this->id)->customer->so_dien_thoai,
+
+        );
+
+        $order[] = array(
+            '0' => '',
+            '1' => '',
+            '2' => '',
+            '3' => 'Thời gian',
+            '4' => date('h:s:i d/m/Y',strtotime(Order::find($this->id)->created_at)),
+
         );
 
         return (collect($order));
@@ -85,7 +124,7 @@ class OrderExport implements FromCollection, WithHeadings, ShouldAutoSize, WithE
     public function registerEvents(): array
     {
         return [
-            AfterSheet::class    => function(AfterSheet $event) {
+            AfterSheet::class    => function (AfterSheet $event) {
                 $cellRange = 'A1:W1'; // All headers
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(14);
             },

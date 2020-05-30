@@ -32,36 +32,35 @@ class OrderController extends Controller
         ->orderBy('monthyear', 'asc')
         ->get();
 
-        $data_thu = [
-            ($data[0]->tongtien ?? 0) / 1000000,
-            ($data[1]->tongtien ?? 0) / 1000000,
-            ($data[2]->tongtien ?? 0) / 1000000,
-            ($data[3]->tongtien ?? 0) / 1000000,
-            ($data[4]->tongtien ?? 0) / 1000000,
-            ($data[5]->tongtien ?? 0) / 1000000,
-            ($data[6]->tongtien ?? 0) / 1000000,
-            ($data[7]->tongtien ?? 0) / 1000000,
-            ($data[8]->tongtien ?? 0) / 1000000,
-            ($data[9]->tongtien ?? 0) / 1000000,
-            ($data[10]->tongtien ?? 0) / 1000000,
-            ($data[11]->tongtien ?? 0) / 1000000,
-            ($data[12]->tongtien ?? 0) / 1000000,
-        ];
+        $data_thu = [];
+        $i = 1;
+        while($i <= 12){
+          $data_thu[] = 0;
+          $i ++;
+        }
+
+        foreach($data_thu as $key => $value){
+          foreach($data as $item){
+              if($key == substr($item->monthyear,0,strpos($item->monthyear,'-') )){
+                  $data_thu[$key - 1] =  $item->tongtien; 
+                }
+            }
+        }
 
         $data_chi = [
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-        ];
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+    ];
         return view('admin.order.group', ['data' => [$data_chi, $data_thu]]);
     }
 
@@ -74,36 +73,34 @@ class OrderController extends Controller
             ->orderBy('monthyear', 'asc')
             ->get();
 
-
-        $data_thu = [
-            ($data[0]->tongtien ?? 0) / 1000000,
-            ($data[1]->tongtien ?? 0) / 1000000,
-            ($data[2]->tongtien ?? 0) / 1000000,
-            ($data[3]->tongtien ?? 0) / 1000000,
-            ($data[4]->tongtien ?? 0) / 1000000,
-            ($data[5]->tongtien ?? 0) / 1000000,
-            ($data[6]->tongtien ?? 0) / 1000000,
-            ($data[7]->tongtien ?? 0) / 1000000,
-            ($data[8]->tongtien ?? 0) / 1000000,
-            ($data[9]->tongtien ?? 0) / 1000000,
-            ($data[10]->tongtien ?? 0) / 1000000,
-            ($data[11]->tongtien ?? 0) / 1000000,
-            ($data[12]->tongtien ?? 0) / 1000000,
-        ];
+            $data_thu = [];
+            $i = 1;
+            while($i <= 12){
+              $data_thu[] = 0;
+              $i ++;
+            }
+    
+            foreach($data_thu as $key => $value){
+              foreach($data as $item){
+                  if($key == substr($item->monthyear,0,strpos($item->monthyear,'-') )){
+                      $data_thu[$key - 1] =  $item->tongtien; 
+                    }
+                }
+            }
 
         $data_chi = [
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
-            rand(1000000, 100000000) / 1000000,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
         ];
 
         return response(['data' => [$data_chi ,$data_thu]]);

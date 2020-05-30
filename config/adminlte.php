@@ -248,6 +248,11 @@ return [
                     'icon' => 'fas fa-paste',
                 ],
                 [
+                    'text' => 'Lịch đặt phòng',
+                    'url'  => 'admin/room/book',
+                    'icon' => 'fas fa-paste',
+                ],
+                [
                     'text'    => 'Thiết lập phòng',
                     'url'     => 'admin/room/setting',
                     'icon' => 'fas fa-paste',

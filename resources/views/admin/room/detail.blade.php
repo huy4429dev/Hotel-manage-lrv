@@ -5,7 +5,7 @@
 @section('title', 'Dashboard')
 @section('content_header')
 <div class="container-fluid d-flex justify-content-between">
-  <h4>Chi tiết phòng:</h4>
+  <h4>Chi tiết phòng: </h4>
   @if($bookRoom->thoi_gian_ket_thuc != null)
   <div class="d-flex">
   <button type="button" class="btn btn-default mr-3" data-toggle="modal" data-target="#replace-room">

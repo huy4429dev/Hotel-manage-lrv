@@ -68,6 +68,8 @@
     var areaChartCanvas = $('#barChart').get(0).getContext('2d')
     
     var currentData = {{json_encode($data)}};
+     console.log(currentData);
+     
     
 
     var areaChartData = {
@@ -93,7 +95,7 @@
           pointStrokeColor    : '#c1c7d1',
           pointHighlightFill  : '#fff',
           pointHighlightStroke: 'rgba(220,220,220,1)',
-          data                : [65, 59, 80, 81, 56, 55, 40 , 65, 59, 80, 81, 56, 55, 40]
+          data                : [0,0,0,0,0,0,0,0,0,0,0,0]
         },
       ]
     }

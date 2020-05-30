@@ -12,6 +12,9 @@
     <a href="{{route('admin.order.index')}}" class="btn btn-secondary " style="width:40px; display:inline-block"><i class="fas fa-angle-left"></i></a>
   </p>
 </div>
+  <p> <span style="width:100px;display:inline-block">Thời gian:</span> {{date('h:s:i d/m/Y',strtotime($order->created_at))}}</p>
+  <p><span style="width:100px;display:inline-block">Khách hàng: </span> {{$order->customer->ho_ten}} </p>
+  <p><span style="width:100px;display:inline-block">Số điện thoại: </span> {{$order->customer->so_dien_thoai}}</p>
 @stop
 @section('content')
 

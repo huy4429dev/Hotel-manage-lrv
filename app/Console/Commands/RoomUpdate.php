@@ -6,6 +6,7 @@ use App\Models\Room;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class RoomUpdate extends Command
 {
@@ -45,15 +46,18 @@ class RoomUpdate extends Command
     {
         
         $rooms = Room::where('trang_thai','full')->whereHas('bookRoom', function($query){
-            $query->where('thoi_gian_ket_thuc','<=', Carbon::now()->add(1,'day')   ); 
+            $query->where('thoi_gian_ket_thuc','<=', Carbon::now()->add(10,'day')   ); 
                                                                 //->add(1,'day')                 
                                                                                             
         })->get();
         
         
-        foreach ($rooms as $room) {
-            $room->trang_thai = 'fulltime'; // cap nhat thành fulltime 
-            $room->save();
+        if(!$rooms->isEmpty())
+        {
+            foreach ($rooms as $room) {
+                $room->trang_thai = 'fulltime'; // cap nhat thành fulltime 
+                $room->save();
+            }
         }
 
         echo "chạy lệnh kiểm tra thời gian của phòng !";

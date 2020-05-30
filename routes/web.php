@@ -1,10 +1,6 @@
 <?php
 
-use App\Models\Order;
-use App\Models\Room;
-use App\Models\Service;
 use App\User;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 
@@ -38,6 +34,7 @@ Route::get('/make-admin', function () {
 Route::get('/', 'Page\HomeController@index');
 
 Route::post('/contact', 'Page\ContactController@contact');
+Route::post('/book-room', 'Page\HomeController@bookRoom');
 
 
 
@@ -67,14 +64,26 @@ Route::prefix('admin')->group(function () {
       ========================================================
     */
 
-  Route::prefix('room')->group(function () {
+    
+    Route::prefix('room')->group(function () {
+
     /*
-            Thanh toán
+          Đặt phòng
+    */
+  
+    Route::get('book', 'Admin\RoomController@listBook')->name('room.book.list');
+    Route::get('book/{id}', 'Admin\RoomController@bookDetail')->name('room.book.detail');
+    /*
+          Thanh toán
     */
 
     Route::post('/checkout', 'Admin\RoomController@checkOut');
 
-    Route::get('/', 'Admin\RoomController@index');
+    /*
+           Danh sách phòng
+    */
+
+    Route::get('/', 'Admin\RoomController@index')->name('room.index');
     Route::get('/map', 'Admin\RoomController@getMap');
 
     /* 
@@ -197,42 +206,4 @@ Route::post('/export', 'ExportController@export')->name('export');
 
 
 Route::get('query', function () {
-  $data = Order::select(DB::raw('sum(tong_tien) as `tongtien`'), DB::raw("CONCAT_WS('-',MONTH(created_at),YEAR(created_at)) as monthyear"))
-    ->whereRaw(DB::raw('YEAR(created_at) = 2020'))
-    ->groupBy('monthyear')
-    ->orderBy('monthyear', 'asc')
-    ->get();
-  return $data;
-  $data_thu = [
-    ($data[0]->tongtien ?? 0 ) / 1000000 ,
-    ($data[1]->tongtien ?? 0 ) / 1000000 ,
-    ($data[2]->tongtien ?? 0 ) / 1000000 ,
-    ($data[3]->tongtien ?? 0 ) / 1000000 ,
-    ($data[4]->tongtien ?? 0 ) / 1000000 ,
-    ($data[5]->tongtien ?? 0 ) / 1000000 ,
-    ($data[6]->tongtien ?? 0 ) / 1000000 ,
-    ($data[7]->tongtien ?? 0 ) / 1000000 ,
-    ($data[8]->tongtien ?? 0 ) / 1000000 ,
-    ($data[9]->tongtien ?? 0 ) / 1000000 ,
-    ($data[10]->tongtien ?? 0 ) / 1000000 ,
-    ($data[11]->tongtien ?? 0 ) / 1000000 ,
-    ($data[12]->tongtien ?? 0 ) / 1000000 ,
-  ];
-
-  $data_chi = [
-      rand(10000000, 50000000) / 1000000 ,
-      rand(10000000, 50000000) / 1000000,
-      rand(10000000, 50000000) / 1000000,
-      rand(10000000, 50000000) / 1000000,
-      rand(10000000, 50000000) / 1000000,
-      rand(10000000, 50000000) / 1000000,
-      rand(10000000, 50000000) / 1000000,
-      rand(10000000, 50000000) / 1000000,
-      rand(10000000, 50000000) / 1000000,
-      rand(10000000, 50000000) / 1000000,
-      rand(10000000, 50000000) / 1000000,
-      rand(10000000, 50000000) / 1000000,
-  ];
-
-        return response(['data' => [$data_chi ,$data_thu]]);  
 });

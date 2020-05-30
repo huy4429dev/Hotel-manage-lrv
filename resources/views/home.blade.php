@@ -14,11 +14,12 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet" />
     
 
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
         .masthead-subheading{
             font-weight: 400;
@@ -333,16 +334,76 @@
         </div>
 
     </div>
+     <div data-toggle="modal" data-target="#exampleModal" style="position: fixed; bottom:20px; right:20px;cursor:pointer">
+         <img width="100px" src="{{url('images/book-icon.png')}}" alt="">
+     </div>
+     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Đặt phòng</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <div class="alert-bookroom alert alert-success">
+						Chúng tôi sẽ liên lạc lại để xác nhận thông tin của bạn
+					</div>  
+      <div class="alert-bookroom-err alert alert-danger">
+                        Lỗi
+					</div>  
+          <div class="form-group">
+              <input type="text" class="form-control" name="fullname" placeholder="Họ tên">
+          </div>
+          <div class="form-group">
+              <input type="text" class="form-control" name="email" placeholder="Email">
+          </div>
+          <div class="form-group">
+              <input type="text" class="form-control" name="phone" placeholder="Số điện thoại">
+          </div>
+          <div class="form-group">
+              <input id="datepicker" type="text" class="form-control" name="ngay_dat" placeholder="Ngày đặt">
+          </div>
+          <div class="form-group">
+              <input type="text" class="form-control" name="thoi_gian_dat" placeholder="Thời gian đặt (giờ)">
+          </div>
+
+          <div class="form-group">
+                <select name="loai_phong_id" id="" class="form-control">
+                    @if(!$typeRoom->isEmpty())
+                        @foreach($typeRoom as $type)
+                            <option value="{{$type->id}}">
+                                {{$type->ten}}
+                            </option>
+                        @endforeach
+                    @endif
+                </select>
+          </div>
+
+      </div>
+      <div class="modal-footer">
+        <button id="bookroom" type="button" class="btn btn-primary">Đặt</button>
+      </div>
+    </div>
+  </div>
+</div>
     <!-- Bootstrap core JS-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <!-- Third party plugin JS-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <!-- Contact form JS-->
     <script src="assets/mail/jqBootstrapValidation.js"></script>
     <!-- <script src="assets/mail/contact_me.js"></script> -->
     <!-- Core theme JS-->
     <script src="js/scripts.js"></script>
+    <script>
+  $( function() {
+    $( "#datepicker" ).datepicker();
+  } );
+  </script>
     <script>
         var modal = document.getElementById("myModal");
         var modalContent = document.querySelector("#myModal p");
@@ -393,7 +454,6 @@
             const url = '{{url("/contact")}}';
 
             const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            console.log(csrf);
 
 
             const data = {
@@ -424,6 +484,62 @@
 
         })
     </script>
+    <script>
+		let bookRoom = document.querySelector('#bookroom');
+		let alertBookRoom = document.querySelector('.alert-bookroom');
+		let alertBookRoomErr = document.querySelector('.alert-bookroom-err');
+		alertBookRoom.style.display = 'none';
+		alertBookRoomErr.style.display = 'none';
+    	function addBookRoom() {
+		let url = "{{url('book-room')}}";
+        const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+		let fullname = document.querySelector('input[name="fullname"]').value;
+		let phone = document.querySelector('input[name="phone"]').value;
+		let email = document.querySelector('input[name="email"]').value;
+		let ngay_dat = document.querySelector('input[name="ngay_dat"]').value;
+		let thoi_gian_dat = document.querySelector('input[name="thoi_gian_dat"]').value;
+		let loai_phong_id = document.querySelector('select[name="loai_phong_id"]').value;
+		let data = {
+			email: email,
+			phone: phone,
+			fullname: fullname,
+            ngay_dat: ngay_dat,
+            thoi_gian_dat: thoi_gian_dat,
+            loai_phong_id: loai_phong_id
+		};
+		fetch(url, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRF-TOKEN': csrf
+				},
+				body: JSON.stringify(data)
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data === 'createdCustomerSuccess') {
+					alertBookRoom.style.display = 'block';
+					setTimeout(() => {
+						alertBookRoom.style.display = 'none';
+					},10000)
+					
+				}
+                else{
+                    alertBookRoomErr.style.display = 'block'; 
+                    
+                    alertBookRoomErr.innerHTML = data.createdCustomerError[0];
+					setTimeout(() => {
+						alertBookRoomErr.style.display = 'none';
+					},10000)
+                }
+			
+			})
+			.catch(err => {
+				console.log(err);
+			})
+	}
+	bookRoom.addEventListener('click',addBookRoom);
+</script>
 </body>
 
 </html>
